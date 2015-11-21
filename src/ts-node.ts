@@ -46,7 +46,7 @@ export type TSish = TS_1_5ish | TS_1_7ish
 /**
  * Export the current version.
  */
-export const VERSION = '0.5.3'
+export const VERSION = '0.5.32'
 
 /**
  * Extensions to compile using TypeScript.
@@ -76,18 +76,20 @@ function readConfig (options: Options, cwd: string, ts: TSish) {
 
   const config = fileName ? tsconfig.readFileSync(fileName, { filterDefinitions: true }) : {
     files: [],
-    compilerOptions: {}
+    compilerOptions: {},
+    tsNodeOptions: {}
   }
 
   config.compilerOptions = extend({
-    target: 'es5',
-    module: 'commonjs'
+    target: 'es5'
   }, config.compilerOptions, {
     rootDir: cwd,
     sourceMap: true,
     inlineSourceMap: false,
     inlineSources: false,
     declaration: false
+  }, {
+    module: 'commonjs' //For npm modules, only allow commonjs format. 
   })
 
   if (typeof (<TS_1_5ish> ts).parseConfigFile === 'function') {
